@@ -3,7 +3,7 @@ This is a system that is designed to work with Xandem motion sensors (http://xan
 Xandem bridge will keep up to date with motion provide by Xandem motion sensors and notify your smarthome brige only when room occupancy changes are detected.
 Multiple devices can subscribe to Xandem Bridge to receive these notifications
 
-** Getting Started **
+**Getting Started**
  * Get set up with Xandem motion sensors
  * Copy and rename the configexample.js file to just config.js
  * Set your xandem host and API key in the config.js file
@@ -13,7 +13,7 @@ Multiple devices can subscribe to Xandem Bridge to receive these notifications
  	npm install && cd client/ && bower install && cd ../
  ```
 
-** Running the system **
+**Running the system**
 ```
 node index.js
 
