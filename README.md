@@ -9,6 +9,7 @@ Multiple devices can subscribe to Xandem Bridge to receive these notifications
  * Set your xandem host and API key in the config.js file
  * Also in the config.js file, set up all of your rooms (copying the values from the drawing tool that Xandem provides will help. One unit is one foot and all parts of all rooms must be between -50 and 50 on both the X and Y axis)
  * Do an npm install and then bower install from the client direcotry
+ 
  ```
  	npm install && cd client/ && bower install && cd ../
  ```
@@ -16,7 +17,6 @@ Multiple devices can subscribe to Xandem Bridge to receive these notifications
 **Running the system**
 ```
 node index.js
-
 ```
  * By default the application will be running on port 3000 (this can be changed in config.js once you create it)
  * Whichever device (ex SmartThings) that you want to receive motion updates at will have to subscripe to Xandem Bridge. Do this By:
