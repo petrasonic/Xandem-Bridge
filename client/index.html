@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Xandem Bridge</title>
+    <link rel="icon" href="img/favicon.ico">
+
+    <link rel="stylesheet" href="css/styles.css" />
+
+  </head>
+  <body>
+    <h1 id="mainTitle">Loading...</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Coordinates</th>
+          <th>Score</th>
+          <th>Occupied Rooms</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td id="coordinates"></td>
+          <td id="score"></td>
+          <td id="occupiedRooms"></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <canvas id="myChart" width="400" height="400"></canvas>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="bower_components/chart.js/dist/Chart.min.js"></script>
+    <script src="bower_components/chartjs-plugin-annotation/chartjs-plugin-annotation.min.js"></script>
+    <script src="bower_components/underscore/underscore-min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>

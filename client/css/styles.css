@@ -1,0 +1,10 @@
+body{
+  font-family: monospace;
+  text-align: center;
+  background: #282828;
+  color: #FFF;
+}
+table{
+  margin-left: auto;
+  margin-right: auto;
+}
