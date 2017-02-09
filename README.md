@@ -20,7 +20,7 @@ node index.js
 ```
  * By default the application will be running on port 3000 (this can be changed in config.js once you create it)
  * Whichever device (ex SmartThings) that you want to receive motion updates at will have to subscripe to Xandem Bridge. Do this By:
-  * Have the device make a POST request to /api/register
+  * Have the device make a POST request to ```/api/register```
   * Include in the headers Content-Type: application/json
   * Include in the body the ip address and port you would like to recieve  updates at in JSON format. For exmaple (use your device's address):
   ```
@@ -31,4 +31,4 @@ You will then receive updates at that address on that port whenever there are ch
 To help with debugging there is a UI you can use to view the motion that Xandem Bridge is picking up from the Xandem API.
 You can go to http://localhost:3000/ or whichever IP address you are running Xandem Bridge from.
 
-Additionally you can request a list of rooms from /api/rooms
+Additionally you can request a list of rooms from ```/api/rooms```
