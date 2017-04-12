@@ -55,8 +55,12 @@ var pollXandem = function(){
         });
         response.on('end', function() {
             var parsed = JSON.parse(body);
+<<<<<<< HEAD
 
             parsed.rooms = roomTracker.getOccupiedRooms(parsed.motion_coordinates);
+=======
+            parsed.rooms = roomTracker.getOccupiedRooms(parsed.motion_coordinates);
+>>>>>>> d6946ac989e084e0f7e6056af80be50ce0ed5e21
             sendDataToSubscribers(parsed);
 
             if(numUsers>0){
@@ -108,6 +112,28 @@ function sendDataToSubscribers(data){
     }
 }
 
+var interval = setInterval(function(){
+    if(lastRoomsWithMotion.length > 0){
+            var data = {};
+            data.rooms = lastRoomsWithMotion;
+        for(var i in subscribers){
+            var post_req = http.request({
+                method: 'POST',
+                    host: subscribers[i].ip,
+                    port: subscribers[i].port,
+                       path: subscribers[i].path,
+                       headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
+                }, function(response){});
+            post_req.write(JSON.stringify(data));
+            post_req.end();
+    
+            post_req.on('error', function(err) {
+                console.error('Error with forwarding the data', err.message);
+            });
+        }
+    }
+
+},1000);
 
 /* SSDP */
 // var Server = require('node-ssdp').Server;
