@@ -106,9 +106,6 @@ function sendDataToSubscribers(data){
 	}
 }
 
-function sendUpdateToSubscribers(rooms){
-}
-
 var interval = setInterval(function(){
 	if(lastRoomsWithMotion.length > 0){
 	        var data = {};
