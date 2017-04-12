@@ -55,12 +55,8 @@ var pollXandem = function(){
         });
         response.on('end', function() {
             var parsed = JSON.parse(body);
-<<<<<<< HEAD
 
             parsed.rooms = roomTracker.getOccupiedRooms(parsed.motion_coordinates);
-=======
-            parsed.rooms = roomTracker.getOccupiedRooms(parsed.motion_coordinates);
->>>>>>> d6946ac989e084e0f7e6056af80be50ce0ed5e21
             sendDataToSubscribers(parsed);
 
             if(numUsers>0){
