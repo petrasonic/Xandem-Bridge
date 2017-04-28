@@ -116,7 +116,7 @@ var tracks = [];
 
 function correlateTracks(coords) {
     coords = coords[0];
-    console.log(coords);
+    //console.log(coords);
 
     if(tracks.length===0){
     // Add out first Track  
@@ -164,13 +164,23 @@ function correlateTracks(coords) {
             tracks[tracks.length-1].kfy.filter(coords[1]);            
         }else{
         // Update nearest Track
+            var line = {
+                        x1:tracks[min.index].x,
+                        y1:tracks[min.index].y,
+                        x2:coords[0],
+                        y2:coords[1]
+                       };
+            var crossedBoundaries = roomTracker.getCrossedBoundaries(line);
+            if (crossedBoundaries.length > 0){
+                   console.log(crossedBoundaries);
+            }
             tracks[min.index].timestamp = new Date();   
             tracks[min.index].x = coords[0]; 
             tracks[min.index].y = coords[1]; 
             tracks[min.index].kfx.filter(coords[0]); 
             tracks[min.index].kfy.filter(coords[1]);
         }
-        console.log(tracks);
+        //console.log(tracks);
     }   
 
 }
@@ -260,5 +270,8 @@ router.get('/info', function(req, res){
 
 router.get('/rooms', function(req, res){
     res.json({rooms: config.ROOMS});
+});
+router.get('/boundaries', function(req, res){
+    res.json({boundaries: config.BOUNDARIES});
 });
 app.use('/api', router);
