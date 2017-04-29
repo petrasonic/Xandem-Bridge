@@ -12,6 +12,7 @@ var router = express.Router();
 var _ = require('underscore');
 var getmac = require('getmac');
 var roomTracker = require('./roomTracker');
+var kalmanFilter = require('kalmanjs').default;
 
 var subscribers = [];
 
@@ -55,7 +56,9 @@ var pollXandem = function(){
         });
         response.on('end', function() {
             var parsed = JSON.parse(body);
-
+            if(parsed.motion_coordinates){
+                correlateTracks(parsed.motion_coordinates);
+            }
             parsed.rooms = roomTracker.getOccupiedRooms(parsed.motion_coordinates);
             sendDataToSubscribers(parsed);
 
@@ -106,6 +109,80 @@ function sendDataToSubscribers(data){
             console.error('Error with forwarding the data', err.message);
         });
     }
+}
+
+
+var tracks = [];
+
+function correlateTracks(coords) {
+    coords = coords[0];
+    //console.log(coords);
+
+    if(tracks.length===0){
+    // Add out first Track  
+        tracks.push({
+            timestamp: new Date(),
+            x: coords[0],
+            y: coords[1],
+            kfx: new kalmanFilter(),
+            kfy: new kalmanFilter()
+        });
+        tracks[0].kfx.filter(tracks[0].x);
+        tracks[0].kfy.filter(tracks[0].y);
+    }else{
+    // Update existing tracks
+        var now = new Date();
+        for(var i in tracks){
+        // Garbage collect
+            if(now-tracks[i].timestamp > 5000){
+                tracks.splice(i,1);
+            }
+        }
+        var min = {index: -1, value: Number.MAX_VALUE};
+        for(var i in tracks){
+        // Find nearest existing Track
+            var a = Math.pow(tracks[i].kfx.x - coords[0], 2);
+            var b = Math.pow(tracks[i].kfy.x - coords[1], 2);
+            var dist = Math.sqrt(a+b);
+
+            if(dist<min.value){
+                min.value = dist
+                min.index = i
+            }
+        }
+
+        if(min.value>5) {
+        // Create new Track
+            tracks.push({
+                timestamp: new Date(),
+                x: coords[0],
+                y: coords[1],
+                kfx: new kalmanFilter(),
+                kfy: new kalmanFilter()
+            });
+            tracks[tracks.length-1].kfx.filter(coords[0]); 
+            tracks[tracks.length-1].kfy.filter(coords[1]);            
+        }else{
+        // Update nearest Track
+            var line = {
+                        x1:tracks[min.index].x,
+                        y1:tracks[min.index].y,
+                        x2:coords[0],
+                        y2:coords[1]
+                       };
+            var crossedBoundaries = roomTracker.getCrossedBoundaries(line);
+            if (crossedBoundaries.length > 0){
+                   console.log(crossedBoundaries);
+            }
+            tracks[min.index].timestamp = new Date();   
+            tracks[min.index].x = coords[0]; 
+            tracks[min.index].y = coords[1]; 
+            tracks[min.index].kfx.filter(coords[0]); 
+            tracks[min.index].kfy.filter(coords[1]);
+        }
+        //console.log(tracks);
+    }   
+
 }
 
 var interval = setInterval(function(){
@@ -193,5 +270,8 @@ router.get('/info', function(req, res){
 
 router.get('/rooms', function(req, res){
     res.json({rooms: config.ROOMS});
+});
+router.get('/boundaries', function(req, res){
+    res.json({boundaries: config.BOUNDARIES});
 });
 app.use('/api', router);
